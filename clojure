@@ -119,4 +119,12 @@ fi
 # Load ~/.clojure on startup if it exists
 init=`[ -e $HOME/.clojure ] && echo $HOME/.clojure`
 
-exec "$CLOJURE_JAVA" "$CLOJURE_JAVA_OPTS" -cp "$CLOJURE_CLASSPATH" $main $init "$@"
+BREAK_CHARS="(){}[],^%$#@\"\";:''|\\"
+#if [which rlwrap &> /dev/null && $# -eq 0]; then
+if which rlwrap &> /dev/null && [ $# -eq 0 ]; then
+    exec rlwrap --remember -c -b $BREAK_CHARS -f $HOME/.clj_completions \
+    "$CLOJURE_JAVA" "$CLOJURE_JAVA_OPTS" -cp "$CLOJURE_CLASSPATH" $main $init "$@"
+else
+    exec "$CLOJURE_JAVA" "$CLOJURE_JAVA_OPTS" -cp "$CLOJURE_CLASSPATH" $main $init "$@"
+fi
+
