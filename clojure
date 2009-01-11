@@ -120,8 +120,8 @@ fi
 init=`[ -e $HOME/.clojure ] && echo $HOME/.clojure`
 
 BREAK_CHARS="(){}[],^%$#@\"\";:''|\\"
-#if [which rlwrap &> /dev/null && $# -eq 0]; then
 if which rlwrap &> /dev/null && [ $# -eq 0 ]; then
+    main="clojure.lang.Repl" #suppress JLine which may have been added
     exec rlwrap --remember -c -b $BREAK_CHARS -f $HOME/.clj_completions \
     "$CLOJURE_JAVA" "$CLOJURE_JAVA_OPTS" -cp "$CLOJURE_CLASSPATH" $main $init "$@"
 else
